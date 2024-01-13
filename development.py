@@ -60,3 +60,15 @@ def generate_summary_dict(text):
         summaries[key] = summary.strip()  # Remove leading/trailing whitespace
 
     return summaries
+
+
+def get_transcript(file_path, myclient):
+    # speech to text
+    # this will take that voice file and turn it back to text
+
+    audio_file = open(file_path, "rb")
+    transcript = myclient.audio.transcriptions.create(
+        model="whisper-1",
+        file=audio_file
+    )
+    print(transcript.text)
