@@ -65,10 +65,24 @@ def main(myclient):
                     model="whisper-1",
                     file=audio_file
                 )
-                # Print or display the transcription text
-                print(transcript.text)
-                # Alternatively, display it in the Streamlit app
-                st.text(transcript.text)
+
+                with st.expander('Video Transcript'):
+                    st.write(transcript.text)
+
+                seconds = st.slider('Select the video duration in seconds', 10, 60, 10)
+
+                if st.button('Generate Script', type='primary'):
+                    dev.generate_script(transcript.text, article, seconds,myclient)
+
+                    response_script = dev.generate_script(transcript.text, article, seconds,myclient)
+                    scripts_raw = response_script.choices[0].message.content
+                    script_dicc = dev.generate_script_dict(scripts_raw)
+                    st.text(script_dicc['script_1'])
+                    st.markdown("## Scripts")
+
+
+
+
 
 if __name__ == "__main__":
     my_client = dev.init_openai()
